@@ -117,16 +117,18 @@ public class Grille extends JPanel {
         }
     }
 
+
     public boolean estGrilleComplete() {
-        for (int i = 0; i < grille.length; i++) {
-            for (int j = 0; j < grille[0].length; j++) {
-                if (grille[i][j] == 0) {
-                    return false;
-                }
+    for (int i = 0; i < grille.length; i++) {
+        for (int j = 0; j < grille[0].length; j++) {
+            // Vérifier si une case est encore vide
+            if (grille[i][j] == 0 && !cases[i][j].getText().matches("[1-9]")) {
+                return false;
             }
         }
-        return true;
     }
+    return true;
+}
 
     public static void main(String[] args) {
         int[][] grille = {
@@ -159,7 +161,7 @@ public class Grille extends JPanel {
                         grillePanel.sauvegarderGrille(selectedFile);
                     }
                 } else {
-                    JOptionPane.showMessageDialog(fenetre, "La grille n'est pas terminée.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(fenetre, "Veuillez remplir toutes les cases pour sauvegarder la grille.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
             });
 
