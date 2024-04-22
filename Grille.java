@@ -26,7 +26,7 @@ public class Grille extends JPanel {
                 textField.setFont(new Font("Arial", Font.BOLD, 20));
                 textField.setEditable(grille[i][j] == 0);
 
-                textField.addMouseListener(new MouseAdapter() {
+                textField.addMouseListener(new MouseAdapter {
                     @Override
                     public void mouseClicked(MouseEvent e) {
                         JTextField clickedField = (JTextField) e.getSource();
