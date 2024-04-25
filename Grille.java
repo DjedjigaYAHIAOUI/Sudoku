@@ -12,13 +12,14 @@ public class Grille extends JPanel {
         setLayout(new GridLayout(grille.length, grille[0].length));
         afficherGrille();
     }
-public JTextField getCaseSelectionnee() {
-    return caseSelectionnee;
-}
 
-public void setCaseSelectionnee(JTextField caseSelectionnee) {
-    this.caseSelectionnee = caseSelectionnee;
-}
+    public JTextField getCaseSelectionnee() {
+        return caseSelectionnee;
+    }
+
+    public void setCaseSelectionnee(JTextField caseSelectionnee) {
+        this.caseSelectionnee = caseSelectionnee;
+    }
 
     public void afficherGrille() {
         cases = new JTextField[grille.length][grille[0].length];
@@ -41,65 +42,78 @@ public void setCaseSelectionnee(JTextField caseSelectionnee) {
 
         if (editable) {
             textField.setDocument(new JTextFieldLimit(1));
+            textField.addMouseListener(new GrilleMouseListener(this));
         }
     }
 
     public boolean estChiffreValide(JTextField textField) {
         String text = textField.getText().trim();
         if (text.isEmpty()) {
-            return true; 
+            return true;
         }
 
         try {
             int chiffre = Integer.parseInt(text);
-            boolean ligneValide = estChiffreValideDansLigne(chiffre, textField);
-            boolean colonneValide = estChiffreValideDansColonne(chiffre, textField);
-            boolean regionValide = estChiffreValideDansRegion(chiffre, textField);
-            
+            int row = cases.length;
+            int col = cases[0].length;
+            int x = -1, y = -1;
+
+            // Trouver les indices de la case sélectionnée
+            for (int i = 0; i < row; i++) {
+                for (int j = 0; j < col; j++) {
+                    if (cases[i][j] == textField) {
+                        x = i;
+                        y = j;
+                        break;
+                    }
+                }
+            }
+
+            boolean ligneValide = estChiffreValideDansLigne(chiffre, x);
+            boolean colonneValide = estChiffreValideDansColonne(chiffre, y);
+            boolean regionValide = estChiffreValideDansRegion(chiffre, x, y);
+
             if (ligneValide && colonneValide && regionValide) {
                 return true;
             } else {
-                textField.setText(""); 
+                textField.setText("");
                 return false;
             }
         } catch (NumberFormatException e) {
-            textField.setText(""); // Effacer le texte s'il n'est pas un nombre
+            textField.setText("");
             return false;
         }
     }
 
-    private boolean estChiffreValideDansLigne(int chiffre, JTextField textField) {
+    private boolean estChiffreValideDansLigne(int chiffre, int row) {
+        int col = cases[0].length;
+
+        for (int j = 0; j < col; j++) {
+            if (grille[row][j] == chiffre && j != caseSelectionnee.getX() / caseSelectionnee.getWidth()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean estChiffreValideDansColonne(int chiffre, int col) {
         int row = cases.length;
 
         for (int i = 0; i < row; i++) {
-            if (cases[i][textField.getX() / textField.getWidth()].getText().equals(String.valueOf(chiffre)) && cases[i][textField.getX() / textField.getWidth()] != textField) {
+            if (grille[i][col] == chiffre && i != caseSelectionnee.getY() / caseSelectionnee.getHeight()) {
                 return false;
             }
         }
         return true;
     }
 
-    private boolean estChiffreValideDansColonne(int chiffre, JTextField textField) {
-        int col = cases[0].length;
-
-        for (int i = 0; i < col; i++) {
-            if (cases[textField.getY() / textField.getHeight()][i].getText().equals(String.valueOf(chiffre)) && cases[textField.getY() / textField.getHeight()][i] != textField) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private boolean estChiffreValideDansRegion(int chiffre, JTextField textField) {
-        int row = cases.length;
-        int col = cases[0].length;
-
-        int regionRow = textField.getX() / textField.getWidth() / 3 * 3;
-        int regionCol = textField.getY() / textField.getHeight() / 3 * 3;
+    private boolean estChiffreValideDansRegion(int chiffre, int row, int col) {
+        int regionRow = row / 3 * 3;
+        int regionCol = col / 3 * 3;
 
         for (int i = regionRow; i < regionRow + 3; i++) {
             for (int j = regionCol; j < regionCol + 3; j++) {
-                if (cases[i][j].getText().equals(String.valueOf(chiffre)) && cases[i][j] != textField) {
+                if (grille[i][j] == chiffre && (i != row || j != col)) {
                     return false;
                 }
             }
