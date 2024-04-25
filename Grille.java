@@ -134,14 +134,15 @@ public class Grille extends JPanel {
         }
     }
 
-    public boolean estGrilleComplete() {
-        for (int i = 0; i < grille.length; i++) {
-            for (int j = 0; j < grille[0].length; j++) {
-                if (grille[i][j] == 0 && !cases[i][j].getText().matches("[1-9]?")) {
-                    return false;
-                }
+  public boolean estGrilleComplete() {
+    for (int i = 0; i < grille.length; i++) {
+        for (int j = 0; j < grille[0].length; j++) {
+            if (grille[i][j] == 0 || !cases[i][j].getText().matches("^[1-9]$")) {
+                return false; // Si une case est vide ou contient un chiffre invalide, la grille n'est pas complète
             }
         }
-        return true;
     }
+    return true; // Si aucune case vide ni aucun chiffre invalide n'est trouvé, la grille est complète
 }
+}
+
