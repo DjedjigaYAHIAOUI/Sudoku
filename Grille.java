@@ -145,4 +145,3 @@ public class Grille extends JPanel {
     return true; // Si aucune case vide ni aucun chiffre invalide n'est trouvé, la grille est complète
 }
 }
-
