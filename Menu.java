@@ -23,7 +23,9 @@ public class Menu extends JFrame implements ActionListener {
         add(manualResolutionButton);
     }
 
-public void actionPerformed(ActionEvent e) {
+
+
+    public void actionPerformed(ActionEvent e) {
     if (e.getSource() == autoResolutionButton) {
         int[][] grille = {
             {5, 3, 0, 0, 7, 0, 0, 0, 0},
