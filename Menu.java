@@ -2,17 +2,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.concurrent.TimeUnit;
+import java.io.*;
 
 public class Menu extends JFrame implements ActionListener {
     private JButton autoResolutionButton;
     private JButton manualResolutionButton;
+    private JButton loadGridButton;
+    private int[][] grille; // Variable pour stocker la grille chargée
 
     public Menu() {
         setTitle("Menu");
-        setSize(300, 150);
+        setSize(300, 200);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new GridLayout(2, 1));
+        setLayout(new GridLayout(3, 1));
 
         autoResolutionButton = new JButton("Résolution Automatique");
         autoResolutionButton.addActionListener(this);
@@ -21,57 +23,40 @@ public class Menu extends JFrame implements ActionListener {
         manualResolutionButton = new JButton("Résolution Manuelle");
         manualResolutionButton.addActionListener(this);
         add(manualResolutionButton);
+
+        loadGridButton = new JButton("Charger Grille");
+        loadGridButton.addActionListener(this);
+        add(loadGridButton);
     }
-
-
 
     public void actionPerformed(ActionEvent e) {
-    if (e.getSource() == autoResolutionButton) {
-        int[][] grille = {
-            {5, 3, 0, 0, 7, 0, 0, 0, 0},
-            {6, 0, 0, 1, 9, 5, 0, 0, 0},
-            {0, 9, 8, 0, 0, 0, 0, 6, 0},
-            {8, 0, 0, 0, 6, 0, 0, 0, 3},
-            {4, 0, 0, 8, 0, 3, 0, 0, 1},
-            {7, 0, 0, 0, 2, 0, 0, 0, 6},
-            {0, 6, 0, 0, 0, 0, 2, 8, 0},
-            {0, 0, 0, 4, 1, 9, 0, 0, 5},
-            {0, 0, 0, 0, 8, 0, 0, 7, 9}
-        };
-
-        long startTime = System.nanoTime();
-        ResolutionAutomatique resolution = new ResolutionAutomatique(grille);
-        resolution.resoudre();
-        long endTime = System.nanoTime();
-        long elapsedTimeInMillis = TimeUnit.NANOSECONDS.toMillis(endTime - startTime);
-
-        new GrilleResolueInterface(grille).setVisible(true);
-        JOptionPane.showMessageDialog(null, "Grille résolue en " + elapsedTimeInMillis + " millisecondes.");
-    } else if (e.getSource() == manualResolutionButton) {
-        // Insérer ici le code pour la résolution manuelle
-    }
-}
-
-
-    private void afficherGrille(int[][] grille) {
-        JFrame frame = new JFrame("Grille Résolue");
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        JPanel panel = new JPanel(new GridLayout(grille.length, grille[0].length));
-
-        for (int i = 0; i < grille.length; i++) {
-            for (int j = 0; j < grille[0].length; j++) {
-                JTextField textField = new JTextField(String.valueOf(grille[i][j]));
-                textField.setEditable(false);
-                textField.setHorizontalAlignment(JTextField.CENTER);
-                textField.setFont(new Font("Arial", Font.BOLD, 20));
-                panel.add(textField);
+        if (e.getSource() == autoResolutionButton) {
+            if (grille != null) { // Vérifier si la grille est chargée
+                // Implémentez ici la résolution automatique
+                JOptionPane.showMessageDialog(this, "Fonctionnalité de résolution automatique à implémenter.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Veuillez charger une grille avant de résoudre automatiquement.");
             }
-        }
+        } else if (e.getSource() == manualResolutionButton) {
+            try {
+                // Lancer GrilleMain
+                ProcessBuilder pb = new ProcessBuilder("java", "GrilleMain");
+                pb.redirectErrorStream(true);
+                Process p = pb.start();
 
-        frame.add(new JScrollPane(panel));
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
+                // Afficher la sortie du processus dans la console
+                BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    System.out.println(line);
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        } else if (e.getSource() == loadGridButton) {
+            // Implémentez ici le chargement de la grille depuis un fichier
+            JOptionPane.showMessageDialog(this, "Fonctionnalité de chargement de grille à implémenter.");
+        }
     }
 
     public static void main(String[] args) {

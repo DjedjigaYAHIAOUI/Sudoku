@@ -1,3 +1,4 @@
+
 public class ResolutionAutomatique {
     private int[][] grille;
 
