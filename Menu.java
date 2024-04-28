@@ -32,8 +32,14 @@ public class Menu extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == autoResolutionButton) {
             if (grille != null) { // Vérifier si la grille est chargée
-                // Implémentez ici la résolution automatique
-                JOptionPane.showMessageDialog(this, "Fonctionnalité de résolution automatique à implémenter.");
+                long startTime = System.nanoTime();
+                ResolutionAutomatique resolution = new ResolutionAutomatique(grille);
+                resolution.resoudre();
+                long endTime = System.nanoTime();
+                long elapsedTimeInMillis = (endTime - startTime) / 1000000;
+
+                afficherGrilleResolue(resolution.getGrille());
+                JOptionPane.showMessageDialog(this, "Grille résolue en " + elapsedTimeInMillis + " millisecondes.");
             } else {
                 JOptionPane.showMessageDialog(this, "Veuillez charger une grille avant de résoudre automatiquement.");
             }
@@ -54,9 +60,55 @@ public class Menu extends JFrame implements ActionListener {
                 ex.printStackTrace();
             }
         } else if (e.getSource() == loadGridButton) {
-            // Implémentez ici le chargement de la grille depuis un fichier
-            JOptionPane.showMessageDialog(this, "Fonctionnalité de chargement de grille à implémenter.");
+            JFileChooser fileChooser = new JFileChooser();
+            int result = fileChooser.showOpenDialog(this);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                try {
+                    grille = chargerGrille(selectedFile);
+                    if (grille != null) {
+                        JOptionPane.showMessageDialog(this, "Grille chargée avec succès.");
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Erreur lors du chargement de la grille.");
+                    }
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(this, "Erreur lors du chargement de la grille : " + ex.getMessage());
+                }
+            }
         }
+    }
+
+    private int[][] chargerGrille(File file) throws IOException {
+        int[][] grille = new int[9][9];
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        String line;
+        int row = 0;
+        while ((line = reader.readLine()) != null && row < 9) {
+            String[] values = line.split(",");
+            for (int col = 0; col < 9 && col < values.length; col++) {
+                grille[row][col] = Integer.parseInt(values[col].trim());
+            }
+            row++;
+        }
+        reader.close();
+        return grille;
+    }
+
+    private void afficherGrilleResolue(int[][] grilleResolue) {
+        JFrame frame = new JFrame("Grille Résolue");
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setLayout(new GridLayout(9, 9));
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                JTextField textField = new JTextField();
+                textField.setText(String.valueOf(grilleResolue[i][j]));
+                textField.setEditable(false);
+                frame.add(textField);
+            }
+        }
+        frame.pack();
+        frame.setVisible(true);
     }
 
     public static void main(String[] args) {
