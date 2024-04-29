@@ -6,6 +6,8 @@ public class Grille extends JPanel {
     private int[][] grille;
     private JTextField[][] cases;
     private JTextField caseSelectionnee;
+    private int rowSelectionnee = -1; // Variable pour stocker l'indice de ligne de la case sélectionnée
+    private int colSelectionnee = -1; // Variable pour stocker l'indice de colonne de la case sélectionnée
 
     public Grille(int[][] grille) {
         this.grille = grille;
@@ -19,6 +21,16 @@ public class Grille extends JPanel {
 
     public void setCaseSelectionnee(JTextField caseSelectionnee) {
         this.caseSelectionnee = caseSelectionnee;
+        // Mettre à jour les indices de ligne et de colonne de la case sélectionnée
+        for (int i = 0; i < cases.length; i++) {
+            for (int j = 0; j < cases[0].length; j++) {
+                if (cases[i][j] == caseSelectionnee) {
+                    rowSelectionnee = i;
+                    colSelectionnee = j;
+                    return;
+                }
+            }
+        }
     }
 
     public void afficherGrille() {
@@ -49,36 +61,25 @@ public class Grille extends JPanel {
     public boolean estChiffreValide(JTextField textField) {
         String text = textField.getText().trim();
         if (text.isEmpty()) {
-            return true;
+            return true; // Si la case est vide, elle est toujours considérée comme valide
         }
 
         try {
             int chiffre = Integer.parseInt(text);
-            int row = cases.length;
-            int col = cases[0].length;
-            int x = -1, y = -1;
 
-            // Trouver les indices de la case sélectionnée
-            for (int i = 0; i < row; i++) {
-                for (int j = 0; j < col; j++) {
-                    if (cases[i][j] == textField) {
-                        x = i;
-                        y = j;
-                        break;
-                    }
-                }
-            }
-
-            boolean ligneValide = estChiffreValideDansLigne(chiffre, x);
-            boolean colonneValide = estChiffreValideDansColonne(chiffre, y);
-            boolean regionValide = estChiffreValideDansRegion(chiffre, x, y);
-
-            if (ligneValide && colonneValide && regionValide) {
+            // Vérifier si le chiffre est contradictoire avec les autres chiffres dans la ligne, colonne et région
+            if (estChiffreValideDansLigne(chiffre, rowSelectionnee) &&
+                estChiffreValideDansColonne(chiffre, colSelectionnee) &&
+                estChiffreValideDansRegion(chiffre, rowSelectionnee, colSelectionnee)) {
+                // Si le chiffre n'est pas contradictoire, le conserver dans la grille principale
+                grille[rowSelectionnee][colSelectionnee] = chiffre;
                 return true;
-            } else {
-                textField.setText("");
-                return false;
             }
+
+            // Réinitialiser la case et retourner false si le chiffre est contradictoire
+            textField.setText("");
+            return false;
+
         } catch (NumberFormatException e) {
             textField.setText("");
             return false;
@@ -86,10 +87,8 @@ public class Grille extends JPanel {
     }
 
     private boolean estChiffreValideDansLigne(int chiffre, int row) {
-        int col = cases[0].length;
-
-        for (int j = 0; j < col; j++) {
-            if (grille[row][j] == chiffre && j != caseSelectionnee.getX() / caseSelectionnee.getWidth()) {
+        for (int j = 0; j < grille[0].length; j++) {
+            if (j != colSelectionnee && grille[row][j] == chiffre) {
                 return false;
             }
         }
@@ -97,10 +96,8 @@ public class Grille extends JPanel {
     }
 
     private boolean estChiffreValideDansColonne(int chiffre, int col) {
-        int row = cases.length;
-
-        for (int i = 0; i < row; i++) {
-            if (grille[i][col] == chiffre && i != caseSelectionnee.getY() / caseSelectionnee.getHeight()) {
+        for (int i = 0; i < grille.length; i++) {
+            if (i != rowSelectionnee && grille[i][col] == chiffre) {
                 return false;
             }
         }
@@ -113,7 +110,7 @@ public class Grille extends JPanel {
 
         for (int i = regionRow; i < regionRow + 3; i++) {
             for (int j = regionCol; j < regionCol + 3; j++) {
-                if (grille[i][j] == chiffre && (i != row || j != col)) {
+                if ((i != row || j != col) && grille[i][j] == chiffre) {
                     return false;
                 }
             }
@@ -134,14 +131,26 @@ public class Grille extends JPanel {
         }
     }
 
-  public boolean estGrilleComplete() {
-    for (int i = 0; i < grille.length; i++) {
-        for (int j = 0; j < grille[0].length; j++) {
-            if (grille[i][j] == 0 || !cases[i][j].getText().matches("^[1-9]$")) {
-                return false; // Si une case est vide ou contient un chiffre invalide, la grille n'est pas complète
+    public boolean estGrilleComplete() {
+        for (int i = 0; i < grille.length; i++) {
+            for (int j = 0; j < grille[0].length; j++) {
+                if (!cases[i][j].getText().matches("^[1-9]$")) {
+                    return false; // Si une case contient un chiffre invalide, la grille n'est pas complète
+                }
             }
         }
+        return true; // Si aucune case vide ni aucun chiffre invalide n'est trouvé, la grille est complète
     }
-    return true; // Si aucune case vide ni aucun chiffre invalide n'est trouvé, la grille est complète
-}
+
+    public boolean estGrilleValide() {
+        for (int i = 0; i < grille.length; i++) {
+            for (int j = 0; j < grille[0].length; j++) {
+                JTextField textField = cases[i][j];
+                if (!estChiffreValide(textField)) {
+                    return false; // Si une case contient un chiffre invalide, la grille n'est pas valide
+                }
+            }
+        }
+        return true; // Si aucune case ne contient un chiffre invalide, la grille est valide
+    }
 }

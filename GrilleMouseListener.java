@@ -24,3 +24,4 @@ public class GrilleMouseListener extends MouseAdapter {
         grille.setCaseSelectionnee(clickedField);
     }
 }
+

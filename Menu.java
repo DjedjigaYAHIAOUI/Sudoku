@@ -1,8 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.*;
+
 
 public class Menu extends JFrame implements ActionListener {
     private JButton autoResolutionButton;
@@ -112,10 +113,10 @@ public class Menu extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new Menu().setVisible(true);
-            }
-        });
+        SwingUtilities.invokeLater(Menu::createAndShowGUI);
+    }
+
+    private static void createAndShowGUI() {
+        new Menu().setVisible(true);
     }
 }

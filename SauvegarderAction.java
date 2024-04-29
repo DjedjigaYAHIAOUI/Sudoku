@@ -1,4 +1,3 @@
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -16,16 +15,12 @@ public class SauvegarderAction implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // Vérifier si la grille est complète
-        if (grillePanel.estGrilleComplete()) {
-            JFileChooser fileChooser = new JFileChooser();
-            int result = fileChooser.showSaveDialog(fenetre);
-            if (result == JFileChooser.APPROVE_OPTION) {
-                File selectedFile = fileChooser.getSelectedFile();
-                grillePanel.sauvegarderGrille(selectedFile);
-            }
-        } else {
-            JOptionPane.showMessageDialog(fenetre, "La grille n'est pas complète. Veuillez la remplir avant de sauvegarder.");
+        JFileChooser fileChooser = new JFileChooser();
+        int result = fileChooser.showSaveDialog(fenetre);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            grillePanel.sauvegarderGrille(selectedFile);
+            JOptionPane.showMessageDialog(fenetre, "Grille sauvegardée avec succès !");
         }
     }
 }
