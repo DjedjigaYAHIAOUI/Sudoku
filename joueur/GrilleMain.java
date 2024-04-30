@@ -3,28 +3,8 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class GrilleMain {
-    public static void main(String[] args) {
-        JFrame choixFenetre = new JFrame("Choix de la Grille");
-        choixFenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        // Bouton pour choisir une grille partiellement remplie
-        JButton grillePartielButton = new JButton("Grille Partiellement Remplie");
-        grillePartielButton.addActionListener(e -> {
-            choisirGrille();
-            choixFenetre.dispose(); // Fermer la fenêtre de choix après sélection
-        });
-
-        JPanel choixPanel = new JPanel();
-        choixPanel.setLayout(new GridLayout(1, 1));
-        choixPanel.add(grillePartielButton);
-
-        choixFenetre.getContentPane().add(choixPanel, BorderLayout.CENTER);
-        choixFenetre.setSize(300, 200);
-        choixFenetre.setVisible(true);
-    }
-
     // Méthode pour choisir et afficher la grille correspondante
-    private static void choisirGrille() {
+    public static void choisirGrille() {
         int[][] grille = {
                 {5, 3, 0, 0, 7, 0, 0, 0, 0},
                 {6, 0, 0, 1, 9, 5, 0, 0, 0},

@@ -1,13 +1,12 @@
-
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class GrilleMouseListener extends MouseAdapter {
-    private Grille grille;
+    private GrilleVide grillevide;
 
-    public GrilleMouseListener(Grille grille) {
-        this.grille = grille;
+    public GrilleMouseListener(GrilleVide grillevide) {
+        this.grillevide = grillevide;
     }
 
     @Override
@@ -16,12 +15,12 @@ public class GrilleMouseListener extends MouseAdapter {
         if (!clickedField.isEditable()) {
             return;
         }
-        if (grille.getCaseSelectionnee() != null && grille.getCaseSelectionnee() != clickedField) {
-            if (!grille.estChiffreValide(grille.getCaseSelectionnee())) {
-                grille.getCaseSelectionnee().setText(grille.getCaseSelectionnee().getText());
+        if (grillevide.getCaseSelectionnee() != null && grillevide.getCaseSelectionnee() != clickedField) {
+            if (!grillevide.estChiffreValide(grillevide.getCaseSelectionnee())) {
+                grillevide.getCaseSelectionnee().setText(grillevide.getCaseSelectionnee().getText());
             }
         }
-        grille.setCaseSelectionnee(clickedField);
+        grillevide.setCaseSelectionnee(clickedField);
     }
 }
 

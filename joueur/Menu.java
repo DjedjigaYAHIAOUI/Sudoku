@@ -11,7 +11,7 @@ public class Menu extends JFrame implements ActionListener {
     private int[][] grille; // Variable pour stocker la grille chargée
 
     public Menu() {
-        setTitle("Joeur");
+        setTitle("Joueur");
         setSize(300, 200);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridLayout(3, 1));
@@ -43,22 +43,8 @@ public class Menu extends JFrame implements ActionListener {
             } else {
                 JOptionPane.showMessageDialog(this, "Veuillez charger une grille avant de résoudre automatiquement.");
             }
-        } else if (e.getSource() == manualResolutionButton) { // Correction de l'accolade
-            try {
-                // Lancer GrilleMain
-                ProcessBuilder pb = new ProcessBuilder("java", "GrilleMain");
-                pb.redirectErrorStream(true);
-                Process p = pb.start();
-
-                // Afficher la sortie du processus dans la console
-                BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    System.out.println(line);
-                }
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+        } else if (e.getSource() == manualResolutionButton) {
+            GrilleMain.choisirGrille(); // Appel à la méthode pour ouvrir la fenêtre de la grille
         } else if (e.getSource() == loadGridButton) {
             JFileChooser fileChooser = new JFileChooser();
             int result = fileChooser.showOpenDialog(this);
