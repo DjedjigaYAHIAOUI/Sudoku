@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
@@ -23,48 +24,66 @@ public class Main {
         frame.pack();
         frame.setVisible(true);
 
-        grilleVideButton.addActionListener(new ActionListener() {
+        ActionListener actionListener = new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
-                // Créez une instance de GrilleVide
-                int[][] grilleVide = new int[9][9];
-                GrilleVide grillePanel = new GrilleVide(grilleVide);
+                if (e.getSource() == grilleVideButton) {
+                    // Créez une instance de GrilleVide
+                    int[][] grilleVide = new int[9][9];
+                    GrilleVide grillePanel = new GrilleVide(grilleVide);
 
-                JFrame grilleFrame = new JFrame("Grille Sudoku");
-                grilleFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                grilleFrame.add(grillePanel);
-                grilleFrame.pack();
-                grilleFrame.setVisible(true);
-            }
-        });
+                    JFrame grilleFrame = new JFrame("Grille Sudoku");
+                    grilleFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    grilleFrame.add(grillePanel);
+                    grilleFrame.pack();
+                    grilleFrame.setVisible(true);
+                } else if (e.getSource() == chargerGrilleButton) {
+                    JFileChooser fileChooser = new JFileChooser();
+                    int result = fileChooser.showOpenDialog(frame);
+                    if (result == JFileChooser.APPROVE_OPTION) {
+                        File selectedFile = fileChooser.getSelectedFile();
+                        try {
+                            List<String> lines = Files.readAllLines(selectedFile.toPath());
+                            List<List<Integer>> gridValues = new ArrayList<>();
 
-        chargerGrilleButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser fileChooser = new JFileChooser();
-                int result = fileChooser.showOpenDialog(frame);
-                if (result == JFileChooser.APPROVE_OPTION) {
-                    File selectedFile = fileChooser.getSelectedFile();
-                    try {
-                        List<String> lines = Files.readAllLines(selectedFile.toPath());
-                        StringBuilder sb = new StringBuilder();
-                        for (String line : lines) {
-                            sb.append(line).append("\n");
+                            for (String line : lines) {
+                                List<Integer> rowValues = new ArrayList<>();
+                                for (char c : line.toCharArray()) {
+                                    if (Character.isDigit(c)) {
+                                        rowValues.add(Character.getNumericValue(c));
+                                    }
+                                }
+                                if (!rowValues.isEmpty()) {
+                                    gridValues.add(rowValues);
+                                }
+                            }
+
+                            int[][] gridArray = new int[gridValues.size()][];
+                            for (int i = 0; i < gridValues.size(); i++) {
+                                List<Integer> row = gridValues.get(i);
+                                int[] rowArray = new int[row.size()];
+                                for (int j = 0; j < row.size(); j++) {
+                                    rowArray[j] = row.get(j);
+                                }
+                                gridArray[i] = rowArray;
+                            }
+
+                            JPanel gridPanel = new GrilleVide(gridArray);
+                            JFrame grilleFrame = new JFrame("Grille Sudoku");
+                            grilleFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                            grilleFrame.add(gridPanel);
+                            grilleFrame.pack();
+                            grilleFrame.setVisible(true);
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                            JOptionPane.showMessageDialog(frame, "Erreur lors du chargement du fichier", "Erreur", JOptionPane.ERROR_MESSAGE);
                         }
-                        JTextArea grilleArea = new JTextArea(sb.toString());
-                        grilleArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
-
-                        JScrollPane scrollPane = new JScrollPane(grilleArea);
-
-                        JFrame grilleFrame = new JFrame("Grille Sudoku");
-                        grilleFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                        grilleFrame.add(scrollPane);
-                        grilleFrame.pack();
-                        grilleFrame.setVisible(true);
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                        JOptionPane.showMessageDialog(frame, "Erreur lors du chargement du fichier", "Erreur", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
-        });
+        };
+
+        grilleVideButton.addActionListener(actionListener);
+        chargerGrilleButton.addActionListener(actionListener);
     }
 }
