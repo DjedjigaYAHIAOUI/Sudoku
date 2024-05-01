@@ -1,3 +1,4 @@
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
@@ -154,3 +155,4 @@ public class GrilleVide extends JPanel {
         return true; // Si aucune case ne contient un chiffre invalide, la grille est valide
     }
 }
+
