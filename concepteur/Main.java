@@ -9,6 +9,8 @@ public class Main {
         JButton grilleVideButton = new JButton("Partir d'une grille vide");
         JButton chargerGrilleButton = new JButton("Charger une grille depuis un fichier");
 
+        GrilleVide grillePanel = new GrilleVide(new int[9][9]); // Crée une grille vide initiale
+
         panel.add(grilleVideButton);
         panel.add(chargerGrilleButton);
 
@@ -16,7 +18,13 @@ public class Main {
         frame.pack();
         frame.setVisible(true);
 
-        grilleVideButton.addActionListener(new GrilleVideAction());
-        chargerGrilleButton.addActionListener(new ChargerGrilleAction(frame));
+        grilleVideButton.addActionListener(e -> {
+            frame.getContentPane().removeAll(); // Supprime tous les composants précédents
+            frame.add(grillePanel); // Ajoute la grille à la fenêtre
+            frame.revalidate(); // Met à jour l'affichage
+        });
+
+        ChargerGrilleAction chargerGrilleAction = new ChargerGrilleAction(frame, grillePanel); // Passer l'instance de grillePanel
+        chargerGrilleButton.addActionListener(chargerGrilleAction);
     }
 }

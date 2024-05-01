@@ -3,6 +3,7 @@ import java.awt.*;
 import java.io.*;
 
 public class GrilleVide extends JPanel {
+    
     private int[][] grille;
     private JTextField[][] cases;
     private JTextField caseSelectionnee;
