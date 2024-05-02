@@ -1,4 +1,6 @@
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Main {
     public static void main(String[] args) {
@@ -18,13 +20,26 @@ public class Main {
         frame.pack();
         frame.setVisible(true);
 
-        grilleVideButton.addActionListener(e -> {
-            frame.getContentPane().removeAll(); // Supprime tous les composants précédents
-            frame.add(grillePanel); // Ajoute la grille à la fenêtre
-            frame.revalidate(); // Met à jour l'affichage
-        });
-
+        grilleVideButton.addActionListener(new GrilleVideAction(frame, grillePanel));
+        
         ChargerGrilleAction chargerGrilleAction = new ChargerGrilleAction(frame, grillePanel); // Passer l'instance de grillePanel
         chargerGrilleButton.addActionListener(chargerGrilleAction);
+    }
+}
+
+class GrilleVideAction implements ActionListener {
+    private JFrame frame;
+    private GrilleVide grillePanel;
+
+    public GrilleVideAction(JFrame frame, GrilleVide grillePanel) {
+        this.frame = frame;
+        this.grillePanel = grillePanel;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        frame.getContentPane().removeAll(); // Supprime tous les composants précédents
+        frame.add(grillePanel); // Ajoute la grille à la fenêtre
+        frame.revalidate(); // Met à jour l'affichage
     }
 }
