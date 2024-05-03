@@ -20,18 +20,18 @@ public class Main {
         frame.pack();
         frame.setVisible(true);
 
-        grilleVideButton.addActionListener(new GrilleVideAction(frame, grillePanel));
+        grilleVideButton.addActionListener(new GrilleVideActionListener(frame, grillePanel));
         
         ChargerGrilleAction chargerGrilleAction = new ChargerGrilleAction(frame, grillePanel); // Passer l'instance de grillePanel
         chargerGrilleButton.addActionListener(chargerGrilleAction);
     }
 }
 
-class GrilleVideAction implements ActionListener {
+class GrilleVideActionListener implements ActionListener {
     private JFrame frame;
     private GrilleVide grillePanel;
 
-    public GrilleVideAction(JFrame frame, GrilleVide grillePanel) {
+    public GrilleVideActionListener(JFrame frame, GrilleVide grillePanel) {
         this.frame = frame;
         this.grillePanel = grillePanel;
     }
