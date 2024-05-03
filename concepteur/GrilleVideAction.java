@@ -18,11 +18,16 @@ public class GrilleVideAction implements ActionListener {
         grilleFrame = new JFrame("Grille Sudoku");
         grilleFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
+        grilleFrame.add(grillePanel); // Ajouter la grillePanel à la JFrame
+
         JButton sauvegarderButton = new JButton("Sauvegarder");
         sauvegarderButton.addActionListener(new SauvegarderActionListener(grilleVide, grilleFrame));
-        grilleFrame.getContentPane().add(sauvegarderButton, BorderLayout.SOUTH);
 
-        grilleFrame.add(grillePanel);
+        JPanel buttonPanel = new JPanel(); // Créer un JPanel pour le bouton
+        buttonPanel.add(sauvegarderButton); // Ajouter le bouton au JPanel
+
+        grilleFrame.getContentPane().add(buttonPanel, BorderLayout.SOUTH); // Ajouter le JPanel au bas de la JFrame
+
         grilleFrame.pack();
         grilleFrame.setSize(CELL_SIZE * GRID_SIZE + GAP_SIZE * (GRID_SIZE + 1), CELL_SIZE * GRID_SIZE + GAP_SIZE * (GRID_SIZE + 1));
         grilleFrame.setVisible(true);
