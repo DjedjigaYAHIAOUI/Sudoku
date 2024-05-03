@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.io.*;
 
 public class Main {
@@ -38,19 +37,12 @@ public class Main {
         frame.setVisible(true); // Rendre la fenêtre visible
 
         // Gestionnaires d'événements pour les boutons
-        grilleVideButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                GrilleVide grillePanel = new GrilleVide(new int[9][9]);
-                afficherGrille(frame, grillePanel);
-            }
-        });
-
-        chargerGrilleButton.addActionListener(new ChargerGrilleAction(frame, null));
+        grilleVideButton.addActionListener(new GrilleVideButtonListener(frame));
+        chargerGrilleButton.addActionListener(new ChargerGrilleButtonListener(frame));
     }
 
     // Méthode pour afficher la grille
-    private static void afficherGrille(JFrame frame, GrilleVide grillePanel) {
+    public static void afficherGrille(JFrame frame, GrilleVide grillePanel) {
         // Suppression des composants actuels du JFrame
         frame.getContentPane().removeAll();
 
@@ -60,19 +52,7 @@ public class Main {
 
         // Création du bouton de sauvegarde
         JButton sauvegarderButton = new JButton("Sauvegarder");
-        sauvegarderButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Implémentez votre logique de sauvegarde ici
-                JFileChooser fileChooser = new JFileChooser();
-                int result = fileChooser.showSaveDialog(frame);
-                if (result == JFileChooser.APPROVE_OPTION) {
-                    File selectedFile = fileChooser.getSelectedFile();
-                    grillePanel.sauvegarderGrille(selectedFile);
-                    JOptionPane.showMessageDialog(frame, "Grille sauvegardée avec succès !");
-                }
-            }
-        });
+        sauvegarderButton.addActionListener(new SauvegarderAction(frame, grillePanel));
 
         // Création d'un JPanel pour le bouton de sauvegarde
         JPanel bottomButtonPanel = new JPanel();

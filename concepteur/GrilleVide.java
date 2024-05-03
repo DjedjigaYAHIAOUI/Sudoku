@@ -33,31 +33,47 @@ public class GrilleVide extends JPanel {
             }
         }
     }
+public void afficherGrille() {
+    cases = new JTextField[grille.length][grille[0].length];
 
-    public void afficherGrille() {
-        cases = new JTextField[grille.length][grille[0].length];
-
-        for (int i = 0; i < grille.length; i++) {
-            for (int j = 0; j < grille[0].length; j++) {
-                JTextField textField = new JTextField(grille[i][j] == 0 ? "" : String.valueOf(grille[i][j]));
-                boolean editable = grille[i][j] == 0;
-                configurerChampTexte(textField, editable);
-                cases[i][j] = textField;
-                add(textField);
+    for (int i = 0; i < grille.length; i++) {
+        for (int j = 0; j < grille[0].length; j++) {
+            JTextField textField = new JTextField(grille[i][j] == 0 ? "" : String.valueOf(grille[i][j]));
+            if (grille[i][j] == 0) {
+                configurerChampTexteGrilleVide(textField, true);
+            } else {
+                textField.setEditable(true); // Les chiffres initialement présents ne sont pas éditables
+                textField.setBackground(Color.LIGHT_GRAY);
             }
+            cases[i][j] = textField;
+            add(textField);
         }
     }
+}
 
-    private void configurerChampTexte(JTextField textField, boolean editable) {
-        textField.setHorizontalAlignment(JTextField.CENTER);
-        textField.setFont(new Font("Arial", Font.BOLD, 20));
-        textField.setEditable(editable);
 
-        if (editable) {
-            textField.setDocument(new JTextFieldLimit(1));
-            textField.addMouseListener(new GrilleMouseListener(this));
-        }
+
+   // Méthode pour configurer les champs de texte dans la grille vide
+private void configurerChampTexteGrilleVide(JTextField textField, boolean editable) {
+    textField.setHorizontalAlignment(JTextField.CENTER);
+    textField.setFont(new Font("Arial", Font.BOLD, 20));
+    textField.setEditable(editable);
+
+    if (editable) {
+        textField.setDocument(new JTextFieldLimit(4));
+        textField.addMouseListener(new GrilleMouseListener(this));
     }
+}
+
+// Méthode pour configurer les champs de texte dans la grille partiellement remplie
+private void configurerChampTexteGrillePartielle(JTextField textField) {
+    textField.setHorizontalAlignment(JTextField.CENTER);
+    textField.setFont(new Font("Arial", Font.BOLD, 20));
+    textField.setEditable(true); // Tous les champs de texte sont éditables
+    textField.setDocument(new JTextFieldLimit(4));
+    textField.addMouseListener(new GrilleMouseListener(this));
+}
+
 
     public boolean estChiffreValide(JTextField textField) {
         String text = textField.getText().trim();
