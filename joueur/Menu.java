@@ -31,24 +31,9 @@ public class Menu extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == autoResolutionButton) {
-            if (grille != null) {
-                SudokuSolver solver = new SudokuSolver();
-                boolean solved = solver.resoudreSudoku(grille);
-
-                if (solved) {
-                    afficherGrilleResolue(grille);
-                } else {
-                    JOptionPane.showMessageDialog(this, "Impossible de résoudre la grille.");
-                }
-            } else {
-                JOptionPane.showMessageDialog(this, "Veuillez charger une grille avant de résoudre automatiquement.");
-            }
+            afficherGrilleAuto();
         } else if (e.getSource() == manualResolutionButton) {
-            if (grille != null) {
-                GrilleMain.resolutionManuelle(grille); // Appel de la méthode pour la résolution manuelle
-            } else {
-                JOptionPane.showMessageDialog(this, "Veuillez charger une grille avant de résoudre manuellement.");
-            }
+            afficherGrilleManuelle();
         } else if (e.getSource() == loadGridButton) {
             JFileChooser fileChooser = new JFileChooser();
             int result = fileChooser.showOpenDialog(this);
@@ -57,7 +42,6 @@ public class Menu extends JFrame implements ActionListener {
                 try {
                     grille = chargerGrille(selectedFile);
                     if (grille != null) {
-                        afficherGrilleAvecSauvegarde(grille); // Afficher la grille chargée avec le bouton de sauvegarde
                         JOptionPane.showMessageDialog(this, "Grille chargée avec succès.");
                     } else {
                         JOptionPane.showMessageDialog(this, "Erreur lors du chargement de la grille.");
@@ -83,6 +67,29 @@ public class Menu extends JFrame implements ActionListener {
         }
         reader.close();
         return grille;
+    }
+
+    private void afficherGrilleAuto() {
+        if (grille != null) {
+            SudokuSolver solver = new SudokuSolver();
+            boolean solved = solver.resoudreSudoku(grille);
+
+            if (solved) {
+                afficherGrilleResolue(grille);
+            } else {
+                JOptionPane.showMessageDialog(this, "Impossible de résoudre la grille.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Veuillez charger une grille avant de résoudre automatiquement.");
+        }
+    }
+
+    private void afficherGrilleManuelle() {
+        if (grille != null) {
+            GrilleMain.resolutionManuelle(grille); // Appel de la méthode pour la résolution manuelle
+        } else {
+            JOptionPane.showMessageDialog(this, "Veuillez charger une grille avant de résoudre manuellement.");
+        }
     }
 
     private void afficherGrilleResolue(int[][] grilleResolue) {
@@ -115,29 +122,6 @@ public class Menu extends JFrame implements ActionListener {
         frame.add(sauvegarderButton, BorderLayout.SOUTH);
 
         frame.pack();
-        frame.setVisible(true);
-    }
-
-    private void afficherGrilleAvecSauvegarde(int[][] grille) {
-        JFrame frame = new JFrame("Grille Sudoku");
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
-
-        Grille grillePanel = new Grille(grille); // Utilisation de la grille sélectionnée
-        frame.getContentPane().add(grillePanel, BorderLayout.CENTER);
-
-        // Bouton de sauvegarde
-        JButton sauvegarderButton = new JButton("Sauvegarder");
-        sauvegarderButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Ajoutez ici la logique pour sauvegarder la grille
-                JOptionPane.showMessageDialog(frame, "Grille sauvegardée avec succès.");
-            }
-        });
-        frame.getContentPane().add(sauvegarderButton, BorderLayout.SOUTH);
-
-        frame.setSize(600, 600);
         frame.setVisible(true);
     }
 

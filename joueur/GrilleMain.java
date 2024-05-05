@@ -29,6 +29,14 @@ public class GrilleMain {
         Grille grillePanel = new Grille(grille); // Utilisation de la grille sélectionnée
         fenetre.getContentPane().add(grillePanel, BorderLayout.CENTER);
 
+        // Création de l'action pour le bouton de sauvegarde
+        ActionListener sauvegarderAction = new SauvegarderAction(fenetre, grillePanel);
+
+        // Bouton de sauvegarde
+        JButton sauvegarderButton = new JButton("Sauvegarder");
+        sauvegarderButton.addActionListener(sauvegarderAction);
+        fenetre.getContentPane().add(sauvegarderButton, BorderLayout.SOUTH);
+
         fenetre.setSize(600, 600);
         fenetre.setVisible(true);
     }
