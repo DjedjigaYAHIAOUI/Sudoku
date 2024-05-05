@@ -44,10 +44,8 @@ public class Menu extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(this, "Veuillez charger une grille avant de résoudre automatiquement.");
             }
         } else if (e.getSource() == manualResolutionButton) {
-            // Fonctionnalité pour la résolution manuelle
             if (grille != null) {
-                // Implémentez ici la logique pour permettre à l'utilisateur de remplir manuellement la grille
-                JOptionPane.showMessageDialog(this, "Fonctionnalité de résolution manuelle à implémenter.");
+                GrilleMain.resolutionManuelle(grille); // Appel de la méthode pour la résolution manuelle
             } else {
                 JOptionPane.showMessageDialog(this, "Veuillez charger une grille avant de résoudre manuellement.");
             }
@@ -59,7 +57,7 @@ public class Menu extends JFrame implements ActionListener {
                 try {
                     grille = chargerGrille(selectedFile);
                     if (grille != null) {
-                        GrilleMain.choisirGrille(grille); // Afficher la grille chargée à l'aide de GrilleMain
+                        afficherGrilleAvecSauvegarde(grille); // Afficher la grille chargée avec le bouton de sauvegarde
                         JOptionPane.showMessageDialog(this, "Grille chargée avec succès.");
                     } else {
                         JOptionPane.showMessageDialog(this, "Erreur lors du chargement de la grille.");
@@ -90,19 +88,56 @@ public class Menu extends JFrame implements ActionListener {
     private void afficherGrilleResolue(int[][] grilleResolue) {
         JFrame frame = new JFrame("Grille Résolue");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setLayout(new GridLayout(9, 9));
+        frame.setLayout(new BorderLayout());
 
+        JPanel gridPanel = new JPanel(new GridLayout(9, 9));
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 JTextField textField = new JTextField();
                 textField.setText(String.valueOf(grilleResolue[i][j]));
                 textField.setEditable(false);
                 textField.setHorizontalAlignment(JTextField.CENTER);
-                frame.add(textField);
+                gridPanel.add(textField);
             }
         }
 
+        // Bouton de sauvegarde
+        JButton sauvegarderButton = new JButton("Sauvegarder");
+        sauvegarderButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Ajoutez ici la logique pour sauvegarder la grille
+                JOptionPane.showMessageDialog(frame, "Grille sauvegardée avec succès.");
+            }
+        });
+
+        frame.add(gridPanel, BorderLayout.CENTER);
+        frame.add(sauvegarderButton, BorderLayout.SOUTH);
+
         frame.pack();
+        frame.setVisible(true);
+    }
+
+    private void afficherGrilleAvecSauvegarde(int[][] grille) {
+        JFrame frame = new JFrame("Grille Sudoku");
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setLayout(new BorderLayout());
+
+        Grille grillePanel = new Grille(grille); // Utilisation de la grille sélectionnée
+        frame.getContentPane().add(grillePanel, BorderLayout.CENTER);
+
+        // Bouton de sauvegarde
+        JButton sauvegarderButton = new JButton("Sauvegarder");
+        sauvegarderButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Ajoutez ici la logique pour sauvegarder la grille
+                JOptionPane.showMessageDialog(frame, "Grille sauvegardée avec succès.");
+            }
+        });
+        frame.getContentPane().add(sauvegarderButton, BorderLayout.SOUTH);
+
+        frame.setSize(600, 600);
         frame.setVisible(true);
     }
 

@@ -21,4 +21,15 @@ public class GrilleMain {
         fenetre.setSize(600, 600);
         fenetre.setVisible(true);
     }
+
+    // Méthode pour la résolution manuelle du Sudoku
+    public static void resolutionManuelle(int[][] grille) {
+        JFrame fenetre = new JFrame("Résolution Manuelle du Sudoku");
+        fenetre.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        Grille grillePanel = new Grille(grille); // Utilisation de la grille sélectionnée
+        fenetre.getContentPane().add(grillePanel, BorderLayout.CENTER);
+
+        fenetre.setSize(600, 600);
+        fenetre.setVisible(true);
+    }
 }
