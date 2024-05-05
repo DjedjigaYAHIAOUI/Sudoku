@@ -6,9 +6,8 @@ public class Grille extends JPanel {
     private int[][] grille;
     private JTextField[][] cases;
     private JTextField caseSelectionnee;
-    private int rowSelectionnee = -1; // Variable pour stocker l'indice de ligne de la case sélectionnée
-    private int colSelectionnee = -1; // Variable pour stocker l'indice de colonne de la case sélectionnée
-
+    private int rowSelectionnee = -1; 
+    private int colSelectionnee = -1; 
     public Grille(int[][] grille) {
         this.grille = grille;
         setLayout(new GridLayout(grille.length, grille[0].length));
@@ -21,7 +20,7 @@ public class Grille extends JPanel {
 
     public void setCaseSelectionnee(JTextField caseSelectionnee) {
         this.caseSelectionnee = caseSelectionnee;
-        // Mettre à jour les indices de ligne et de colonne de la case sélectionnée
+       
         for (int i = 0; i < cases.length; i++) {
             for (int j = 0; j < cases[0].length; j++) {
                 if (cases[i][j] == caseSelectionnee) {
@@ -61,22 +60,22 @@ public class Grille extends JPanel {
     public boolean estChiffreValide(JTextField textField) {
         String text = textField.getText().trim();
         if (text.isEmpty()) {
-            return true; // Si la case est vide, elle est toujours considérée comme valide
+            return true; 
         }
 
         try {
             int chiffre = Integer.parseInt(text);
 
-            // Vérifier si le chiffre est contradictoire avec les autres chiffres dans la ligne, colonne et région
+           
             if (estChiffreValideDansLigne(chiffre, rowSelectionnee) &&
                 estChiffreValideDansColonne(chiffre, colSelectionnee) &&
                 estChiffreValideDansRegion(chiffre, rowSelectionnee, colSelectionnee)) {
-                // Si le chiffre n'est pas contradictoire, le conserver dans la grille principale
+                
                 grille[rowSelectionnee][colSelectionnee] = chiffre;
                 return true;
             }
 
-            // Réinitialiser la case et retourner false si le chiffre est contradictoire
+           
             textField.setText("");
             return false;
 
@@ -135,11 +134,11 @@ public class Grille extends JPanel {
         for (int i = 0; i < grille.length; i++) {
             for (int j = 0; j < grille[0].length; j++) {
                 if (!cases[i][j].getText().matches("^[1-9]$")) {
-                    return false; // Si une case contient un chiffre invalide, la grille n'est pas complète
+                    return false;
                 }
             }
         }
-        return true; // Si aucune case vide ni aucun chiffre invalide n'est trouvé, la grille est complète
+        return true; 
     }
 
     public boolean estGrilleValide() {
@@ -147,10 +146,10 @@ public class Grille extends JPanel {
             for (int j = 0; j < grille[0].length; j++) {
                 JTextField textField = cases[i][j];
                 if (!estChiffreValide(textField)) {
-                    return false; // Si une case contient un chiffre invalide, la grille n'est pas valide
+                    return false; 
                 }
             }
         }
-        return true; // Si aucune case ne contient un chiffre invalide, la grille est valide
+        return true; 
     }
 }

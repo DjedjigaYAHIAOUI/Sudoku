@@ -1,4 +1,3 @@
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -9,7 +8,7 @@ public class Menu extends JFrame implements ActionListener {
     private JButton autoResolutionButton;
     private JButton manualResolutionButton;
     private JButton loadGridButton;
-    private int[][] grille; // Variable pour stocker la grille chargée
+    private int[][] grille; 
 
     public Menu() {
         setTitle("Joueur");
@@ -19,14 +18,20 @@ public class Menu extends JFrame implements ActionListener {
 
         autoResolutionButton = new JButton("Résolution Automatique");
         autoResolutionButton.addActionListener(this);
+        autoResolutionButton.setBackground(new Color(50, 50, 200)); // Couleur bleu foncé
+        autoResolutionButton.setForeground(Color.WHITE); // Texte blanc
         add(autoResolutionButton);
 
         manualResolutionButton = new JButton("Résolution Manuelle");
         manualResolutionButton.addActionListener(this);
+        manualResolutionButton.setBackground(new Color(50, 50, 200)); // Couleur bleu foncé
+        manualResolutionButton.setForeground(Color.WHITE); // Texte blanc
         add(manualResolutionButton);
 
         loadGridButton = new JButton("Charger Grille");
         loadGridButton.addActionListener(this);
+        loadGridButton.setBackground(new Color(50, 50, 200)); // Couleur bleu foncé
+        loadGridButton.setForeground(Color.WHITE); // Texte blanc
         add(loadGridButton);
     }
 
@@ -87,7 +92,7 @@ public class Menu extends JFrame implements ActionListener {
 
     private void afficherGrilleManuelle() {
         if (grille != null) {
-            GrilleMain.resolutionManuelle(grille); // Appel de la méthode pour la résolution manuelle
+            GrilleMain.resolutionManuelle(grille); 
         } else {
             JOptionPane.showMessageDialog(this, "Veuillez charger une grille avant de résoudre manuellement.");
         }
@@ -109,10 +114,10 @@ public class Menu extends JFrame implements ActionListener {
             }
         }
 
-        // Bouton de sauvegarde
         JButton sauvegarderButton = new JButton("Sauvegarder");
         sauvegarderButton.addActionListener(new SauvegarderActionListener(frame));
-
+        sauvegarderButton.setBackground(new Color(50, 50, 200)); // Couleur bleu foncé
+        sauvegarderButton.setForeground(Color.WHITE); // Texte blanc
         frame.add(gridPanel, BorderLayout.CENTER);
         frame.add(sauvegarderButton, BorderLayout.SOUTH);
 
@@ -138,7 +143,6 @@ class SauvegarderActionListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // Ajoutez ici la logique pour sauvegarder la grille
         JOptionPane.showMessageDialog(frame, "Grille sauvegardée avec succès.");
     }
 }

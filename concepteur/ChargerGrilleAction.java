@@ -9,14 +9,13 @@ import java.util.List;
 
 public class ChargerGrilleAction implements ActionListener {
     private JFrame parentFrame;
-    private GrilleVide gridPanel; // Référence à la grille chargée
-
+    private GrilleVide gridPanel; 
     public ChargerGrilleAction(JFrame parentFrame, GrilleVide gridPanel) {
         this.parentFrame = parentFrame;
         this.gridPanel = gridPanel;
     }
 
-    // Méthode pour charger la grille depuis un fichier
+   
     public void chargerGrille(File selectedFile) {
         try {
             List<String> lines = Files.readAllLines(selectedFile.toPath());
@@ -44,11 +43,11 @@ public class ChargerGrilleAction implements ActionListener {
                 gridArray[i] = rowArray;
             }
 
-            // Création de la grille et affichage
+            
             gridPanel = new GrilleVide(gridArray);
-            parentFrame.getContentPane().removeAll(); // Supprime les composants actuels du conteneur principal
-            parentFrame.add(gridPanel); // Ajoute la grille au conteneur principal
-            parentFrame.revalidate(); // Met à jour l'affichage
+            parentFrame.getContentPane().removeAll(); 
+            parentFrame.add(gridPanel); 
+            parentFrame.revalidate(); 
         } catch (IOException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(parentFrame, "Erreur lors du chargement du fichier", "Erreur", JOptionPane.ERROR_MESSAGE);
@@ -61,7 +60,7 @@ public class ChargerGrilleAction implements ActionListener {
         int result = fileChooser.showOpenDialog(parentFrame);
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-            chargerGrille(selectedFile); // Appel de la méthode pour charger la grille
+            chargerGrille(selectedFile); 
         }
     }
 }
