@@ -47,7 +47,6 @@ public class Menu extends JFrame implements ActionListener {
             // Fonctionnalité pour la résolution manuelle
             if (grille != null) {
                 // Implémentez ici la logique pour permettre à l'utilisateur de remplir manuellement la grille
-                // Vous pouvez utiliser des JTextField pour chaque case de la grille et des actions de l'utilisateur pour saisir les valeurs
                 JOptionPane.showMessageDialog(this, "Fonctionnalité de résolution manuelle à implémenter.");
             } else {
                 JOptionPane.showMessageDialog(this, "Veuillez charger une grille avant de résoudre manuellement.");
@@ -60,6 +59,7 @@ public class Menu extends JFrame implements ActionListener {
                 try {
                     grille = chargerGrille(selectedFile);
                     if (grille != null) {
+                        GrilleMain.choisirGrille(grille); // Afficher la grille chargée à l'aide de GrilleMain
                         JOptionPane.showMessageDialog(this, "Grille chargée avec succès.");
                     } else {
                         JOptionPane.showMessageDialog(this, "Erreur lors du chargement de la grille.");
