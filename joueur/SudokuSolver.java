@@ -1,75 +1,78 @@
 public class SudokuSolver {
+    private static final int TAILLE = 9;
+
     public boolean resoudreSudoku(int[][] grille) {
-        int N = grille.length;
-        int row = -1;
-        int col = -1;
-        boolean isEmpty = true;
+        int ligne = -1;
+        int colonne = -1;
+        boolean estVide = true;
 
-        // Recherche d'une cellule vide dans la grille
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
+        // Trouver une cellule vide
+        for (int i = 0; i < TAILLE; i++) {
+            for (int j = 0; j < TAILLE; j++) {
                 if (grille[i][j] == 0) {
-                    row = i;
-                    col = j;
-
-                    // Il y a une cellule vide, la grille n'est pas vide
-                    isEmpty = false;
+                    ligne = i;
+                    colonne = j;
+                    estVide = false;
                     break;
                 }
             }
-            if (!isEmpty) {
+            if (!estVide) {
                 break;
             }
         }
 
-        // S'il n'y a pas de cellule vide, la grille est résolue
-        if (isEmpty) {
+        // Si aucune cellule vide n'est trouvée, le puzzle est résolu
+        if (estVide) {
             return true;
         }
 
-        // Essayer de placer un chiffre de 1 à 9 dans la cellule vide
-        for (int num = 1; num <= 9; num++) {
-            if (SudokuHelper.estValide(grille, row, col, num)) { // Modification ici
-                grille[row][col] = num;
+        // Essayer les chiffres de 1 à 9
+        for (int num = 1; num <= TAILLE; num++) {
+            if (estSecuritaire(grille, ligne, colonne, num)) {
+                grille[ligne][colonne] = num;
                 if (resoudreSudoku(grille)) {
                     return true;
+                } else {
+                    grille[ligne][colonne] = 0; // Retour en arrière
                 }
-                grille[row][col] = 0; // Annuler le placement s'il ne mène pas à une solution
             }
         }
 
-        // Aucun chiffre de 1 à 9 ne fonctionne dans cette cellule
+        // Déclencher le retour en arrière
         return false;
     }
-}
 
-class SudokuHelper {
-    public static boolean estValide(int[][] grille, int row, int col, int num) {
-        // Vérification de la ligne
-        for (int j = 0; j < 9; j++) {
-            if (grille[row][j] == num && j != col) {
-                return false;
+    private boolean estSecuritaire(int[][] grille, int ligne, int colonne, int num) {
+        // Vérifier si le chiffre n'est pas déjà présent dans la ligne, la colonne et la boîte 3x3 actuelle
+        return !utiliseDansLigne(grille, ligne, num) && !utiliseDansColonne(grille, colonne, num) && !utiliseDansBoite(grille, ligne - ligne % 3, colonne - colonne % 3, num);
+    }
+
+    private boolean utiliseDansLigne(int[][] grille, int ligne, int num) {
+        for (int colonne = 0; colonne < TAILLE; colonne++) {
+            if (grille[ligne][colonne] == num) {
+                return true;
             }
         }
+        return false;
+    }
 
-        // Vérification de la colonne
-        for (int i = 0; i < 9; i++) {
-            if (grille[i][col] == num && i != row) {
-                return false;
+    private boolean utiliseDansColonne(int[][] grille, int colonne, int num) {
+        for (int ligne = 0; ligne < TAILLE; ligne++) {
+            if (grille[ligne][colonne] == num) {
+                return true;
             }
         }
+        return false;
+    }
 
-        // Vérification du bloc 3x3
-        int startRow = row - row % 3;
-        int startCol = col - col % 3;
-        for (int i = startRow; i < startRow + 3; i++) {
-            for (int j = startCol; j < startCol + 3; j++) {
-                if (grille[i][j] == num && (i != row || j != col)) {
-                    return false;
+    private boolean utiliseDansBoite(int[][] grille, int ligneDebut, int colonneDebut, int num) {
+        for (int ligne = 0; ligne < 3; ligne++) {
+            for (int colonne = 0; colonne < 3; colonne++) {
+                if (grille[ligne + ligneDebut][colonne + colonneDebut] == num) {
+                    return true;
                 }
             }
         }
-
-        return true;
+        return false;
     }
 }

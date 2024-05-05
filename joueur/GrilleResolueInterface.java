@@ -1,24 +1,28 @@
-
 import javax.swing.*;
 import java.awt.*;
 
 public class GrilleResolueInterface extends JFrame {
-    public GrilleResolueInterface(int[][] grille) {
-        setTitle("Grille Résolue");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new GridLayout(grille.length, grille[0].length));
+    private static class CaseGrille extends JTextField {
+        public CaseGrille(int valeur) {
+            if (valeur != 0) {
+                setText(String.valueOf(valeur));
+                setEditable(false);
+            }
+        }
+    }
 
-        for (int i = 0; i < grille.length; i++) {
-            for (int j = 0; j < grille[0].length; j++) {
-                JTextField textField = new JTextField(String.valueOf(grille[i][j]));
-                textField.setEditable(false);
-                textField.setHorizontalAlignment(JTextField.CENTER);
-                textField.setFont(new Font("Arial", Font.BOLD, 20));
-                add(textField);
+    public GrilleResolueInterface(int[][] grilleResolue) {
+        setTitle("Grille Résolue");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLayout(new GridLayout(9, 9));
+
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                add(new CaseGrille(grilleResolue[i][j]));
             }
         }
 
         pack();
-        setLocationRelativeTo(null);
+        setVisible(true);
     }
 }

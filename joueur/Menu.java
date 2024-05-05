@@ -1,9 +1,8 @@
-
 import javax.swing.*;
 import java.awt.*;
-import java.io.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.*;
 
 public class Menu extends JFrame implements ActionListener {
     private JButton autoResolutionButton;
@@ -21,9 +20,9 @@ public class Menu extends JFrame implements ActionListener {
         autoResolutionButton.addActionListener(this);
         add(autoResolutionButton);
 
-        manualResolutionButton = new JButton("Résolution Manuelle"); // Ajout du bouton de résolution manuelle
+        manualResolutionButton = new JButton("Résolution Manuelle");
         manualResolutionButton.addActionListener(this);
-        add(manualResolutionButton); // Ajout du bouton de résolution manuelle
+        add(manualResolutionButton);
 
         loadGridButton = new JButton("Charger Grille");
         loadGridButton.addActionListener(this);
@@ -32,20 +31,27 @@ public class Menu extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == autoResolutionButton) {
-            if (grille != null) { // Vérifier si la grille est chargée
-                long startTime = System.nanoTime();
-                ResolutionAutomatique resolution = new ResolutionAutomatique(grille);
-                resolution.resoudre();
-                long endTime = System.nanoTime();
-                long elapsedTimeInMillis = (endTime - startTime) / 1000000;
+            if (grille != null) {
+                SudokuSolver solver = new SudokuSolver();
+                boolean solved = solver.resoudreSudoku(grille);
 
-                afficherGrilleResolue(resolution.getGrille());
-                JOptionPane.showMessageDialog(this, "Grille résolue en " + elapsedTimeInMillis + " millisecondes.");
+                if (solved) {
+                    afficherGrilleResolue(grille);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Impossible de résoudre la grille.");
+                }
             } else {
                 JOptionPane.showMessageDialog(this, "Veuillez charger une grille avant de résoudre automatiquement.");
             }
         } else if (e.getSource() == manualResolutionButton) {
-            GrilleMain.choisirGrille(); // Appel à la méthode pour ouvrir la fenêtre de la grille
+            // Fonctionnalité pour la résolution manuelle
+            if (grille != null) {
+                // Implémentez ici la logique pour permettre à l'utilisateur de remplir manuellement la grille
+                // Vous pouvez utiliser des JTextField pour chaque case de la grille et des actions de l'utilisateur pour saisir les valeurs
+                JOptionPane.showMessageDialog(this, "Fonctionnalité de résolution manuelle à implémenter.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Veuillez charger une grille avant de résoudre manuellement.");
+            }
         } else if (e.getSource() == loadGridButton) {
             JFileChooser fileChooser = new JFileChooser();
             int result = fileChooser.showOpenDialog(this);
@@ -72,9 +78,8 @@ public class Menu extends JFrame implements ActionListener {
         String line;
         int row = 0;
         while ((line = reader.readLine()) != null && row < 9) {
-            String[] values = line.split(",");
-            for (int col = 0; col < 9 && col < values.length; col++) {
-                grille[row][col] = Integer.parseInt(values[col].trim());
+            for (int col = 0; col < 9; col++) {
+                grille[row][col] = Character.getNumericValue(line.charAt(col));
             }
             row++;
         }
@@ -86,14 +91,17 @@ public class Menu extends JFrame implements ActionListener {
         JFrame frame = new JFrame("Grille Résolue");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLayout(new GridLayout(9, 9));
+
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 JTextField textField = new JTextField();
                 textField.setText(String.valueOf(grilleResolue[i][j]));
                 textField.setEditable(false);
+                textField.setHorizontalAlignment(JTextField.CENTER);
                 frame.add(textField);
             }
         }
+
         frame.pack();
         frame.setVisible(true);
     }
