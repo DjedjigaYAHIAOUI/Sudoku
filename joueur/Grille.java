@@ -52,7 +52,7 @@ public class Grille extends JPanel {
         textField.setEditable(editable);
 
         if (editable) {
-            textField.setDocument(new JTextFieldLimit(1));
+            textField.setDocument(new JTextFieldLimit(4));
             textField.addMouseListener(new GrilleMouseListener(this));
         }
     }
