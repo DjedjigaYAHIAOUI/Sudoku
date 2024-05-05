@@ -1,3 +1,4 @@
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -110,13 +111,7 @@ public class Menu extends JFrame implements ActionListener {
 
         // Bouton de sauvegarde
         JButton sauvegarderButton = new JButton("Sauvegarder");
-        sauvegarderButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Ajoutez ici la logique pour sauvegarder la grille
-                JOptionPane.showMessageDialog(frame, "Grille sauvegardée avec succès.");
-            }
-        });
+        sauvegarderButton.addActionListener(new SauvegarderActionListener(frame));
 
         frame.add(gridPanel, BorderLayout.CENTER);
         frame.add(sauvegarderButton, BorderLayout.SOUTH);
@@ -131,5 +126,19 @@ public class Menu extends JFrame implements ActionListener {
 
     private static void createAndShowGUI() {
         new Menu().setVisible(true);
+    }
+}
+
+class SauvegarderActionListener implements ActionListener {
+    private JFrame frame;
+
+    public SauvegarderActionListener(JFrame frame) {
+        this.frame = frame;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // Ajoutez ici la logique pour sauvegarder la grille
+        JOptionPane.showMessageDialog(frame, "Grille sauvegardée avec succès.");
     }
 }
